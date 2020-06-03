@@ -10,3 +10,8 @@ script:
     - CGO_ENABLED=0 go build -o demo
 
     - echo "$REGISTRY_PASSWORD" | docker login --username $REGISTRY_USER --password-stdin
+    - docker build -f Dockerfile -t greani/demo:latest ./
+    - GIT_SHA="$(git rev-parse --short HEAD)"
+    - docker tag greani/demo:latest greani/demo:$GIT_SHA
+    - docker push greani/demo:latest
+    - docker push greani/demo:$GIT_SHA
